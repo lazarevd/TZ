@@ -32,7 +32,7 @@ public class Main {
         }
         return retList;
     }
-
+ 
 
     private float genOperationSum(float min, float max) {
         return RandomGenerator.getRandomFloat(min, max);
