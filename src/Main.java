@@ -1,4 +1,5 @@
 import ru.laz.tz.util.RandomGenerator;
+import ru.laz.tz.util.Ruble;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,10 @@ import java.util.Random;
 
 public class Main {
 
+
+    private static final int YEARS = 1;
+    private static final long MIN_SUM = 10000;
+    private static final long MAX_SUM = 100000;
 
     private List<String> readDataFromFile(String inputFileName) {
 
@@ -32,18 +38,39 @@ public class Main {
         }
         return retList;
     }
- 
 
-    private float genOperationSum(float min, float max) {
-        return RandomGenerator.getRandomFloat(min, max);
+
+    private static String genOffice(List<String> offices) {
+        int idx = RandomGenerator.genInt(offices.size());
+        return offices.get(idx);
     }
 
 
+    private static String genSum(long min, long max) {
+        return new Ruble(RandomGenerator.genLong(min*100, max*100), Ruble.Currency.CENT).toString();
+    }
+
+
+    private static String genDate() {
+
+        int currentYear = LocalDateTime.now().getYear();
+        LocalDateTime fromDate = LocalDateTime.of(currentYear-1, 1, 1, 0, 00, 00);
+        return RandomGenerator.getRandomDate(fromDate, fromDate.plus(YEARS, ChronoUnit.YEARS)).toString();
+    }
+
+
+    private static int genId() {
+        return RandomGenerator.genInt(Integer.MAX_VALUE);
+    }
 
     public static void main(String[] args) {
 
-        System.out.println(RandomGenerator.getRandomDate(
-                LocalDateTime.of(1986, 12, 16, 7, 45, 55),
-                LocalDateTime.of(2018, 12, 16, 7, 46, 55)));
+        List<String> offices = new ArrayList<>();
+        for (int i=0; i < 50; i++) {
+            offices.add(RandomGenerator.genInt(5000)+"");
+        }
+        for (int i=0; i<90000;i++) {
+            System.out.println(genDate() + "\t" + genOffice(offices) + "\t" + genId() + "\t" + genSum(MIN_SUM, MAX_SUM));
+        }
     }
 }

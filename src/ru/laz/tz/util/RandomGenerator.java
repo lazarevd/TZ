@@ -25,5 +25,19 @@ public class RandomGenerator {
         tempDate = tempDate.plus(secondsDifference, ChronoUnit.SECONDS);
         return tempDate;
     }
+
+
+    public static int genInt() {
+        return random.nextInt();
+    }
+
+    public static int genInt(int bound) {
+        return random.nextInt(bound);
+    }
+
+
+    public static long genLong(long min, long max) {
+        return random.nextLong(max-min) + min;
+    }
 }
 
