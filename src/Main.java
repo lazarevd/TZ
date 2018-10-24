@@ -61,6 +61,7 @@ public class Main {
     }
 
 
+
     private static int genId() {
         return RandomGenerator.genInt(Integer.MAX_VALUE);
     }
@@ -78,19 +79,16 @@ public class Main {
     	} catch (FileNotFoundException e) {
 			System.out.println("Can not write file " + operationsFile);
 		}
-    	
-    	
-    	
-
     }
     
 
     public static void main(String[] args) {
 
+        String officesFile = args[0];
+        int count = Integer.parseInt(args[1]);
+        String resultFile = args[2];
 
-
-        List<String> offices = readDataFromFile(System.getProperty("user.dir") +"/etc/offices.txt");
-             
-        generateFile(offices, 50000, System.getProperty("user.dir") +"/etc/operations.txt");
+        List<String> offices = readDataFromFile(officesFile);
+        generateFile(offices, count, resultFile);
     }
 }
