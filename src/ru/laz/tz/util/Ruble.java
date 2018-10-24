@@ -1,5 +1,7 @@
 package ru.laz.tz.util;
 
+import java.util.IllegalFormatException;
+
 public class Ruble {
 
     public enum Currency{
@@ -28,6 +30,25 @@ public class Ruble {
 
     public int getLeftCents() {
         return (int)(cent%100);
+    }
+    
+    
+    public static Ruble toRuble(String inputStr) {
+    	
+    	String[] components = inputStr.split(".");
+    	if (components.length != 2) throw new IllegalArgumentException("Ruble must be in 100.00 format");
+    	
+    	int rub,cent;
+    	
+    	try {
+	    	rub = Integer.parseInt(components[0]);
+	    	cent = Integer.parseInt(components[1]);
+    	}
+    	catch (NumberFormatException nfe) {
+    		 throw new IllegalArgumentException("Ruble must be in 100.00 format");
+    	}
+	
+    	return new Ruble(rub*100 + cent, Currency.CENT);
     }
 
     @Override

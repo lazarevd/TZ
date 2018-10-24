@@ -3,8 +3,10 @@ import ru.laz.tz.util.Ruble;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -21,7 +23,7 @@ public class Main {
     private static final long MIN_SUM = 10000;
     private static final long MAX_SUM = 100000;
 
-    private List<String> readDataFromFile(String inputFileName) {
+    private static List<String> readDataFromFile(String inputFileName) {
 
         List<String> retList = new ArrayList<>();
 
@@ -32,9 +34,9 @@ public class Main {
                 line = br.readLine();
             }
         } catch (FileNotFoundException e) {
-            System.out.println(String.format("File {} not found",inputFileName));
+            System.out.println("File "+inputFileName+" not found");
         } catch (IOException e) {
-            System.out.println(String.format("File {} reading error",inputFileName));
+            System.out.println("File "+inputFileName+" reading error");
         }
         return retList;
     }
@@ -62,15 +64,33 @@ public class Main {
     private static int genId() {
         return RandomGenerator.genInt(Integer.MAX_VALUE);
     }
+    
+    
+    
+    private static void generateFile(List<String> offices, int rowCount, String operationsFile) {
+    	
+    	try (PrintStream ps = new PrintStream(new FileOutputStream(operationsFile))) {
+    		
+            for (int i=0; i<rowCount;i++) {
+            	ps.println(genDate() + "\t" + genOffice(offices) + "\t" + genId() + "\t" + genSum(MIN_SUM, MAX_SUM));
+             }
+    		
+    	} catch (FileNotFoundException e) {
+			System.out.println("Can not write file " + operationsFile);
+		}
+    	
+    	
+    	
+
+    }
+    
 
     public static void main(String[] args) {
 
-        List<String> offices = new ArrayList<>();
-        for (int i=0; i < 50; i++) {
-            offices.add(RandomGenerator.genInt(5000)+"");
-        }
-        for (int i=0; i<90000;i++) {
-            System.out.println(genDate() + "\t" + genOffice(offices) + "\t" + genId() + "\t" + genSum(MIN_SUM, MAX_SUM));
-        }
+
+
+        List<String> offices = readDataFromFile(System.getProperty("user.dir") +"/etc/offices.txt");
+             
+        generateFile(offices, 50000, System.getProperty("user.dir") +"/etc/operations.txt");
     }
 }
